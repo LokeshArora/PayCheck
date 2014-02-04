@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<!-- Bean Mapping -->
+	<bean id="loginBean" class="smartpay.login.bean.LoginBean" scope="prototype">
+	</bean>
+	<bean id="loginAction" class="smartpay.login.action.LoginAction">
+		<property name="loginDAO" ref="loginDAO"/>
+		<property name="loginBean" ref="loginBean"/>
+	</bean>
+	
+	
+	<bean id="dataSource" 
+         		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/SmartPay" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+  		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="loginDAO" class="smartpay.login.dao.LoginDAO">
+		<property name="identityDAO" ref="identityDAO"/>
+	</bean>
+	<bean id="identityDAO" class="smartpay.Base.IdentityDAO">
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+</beans>
