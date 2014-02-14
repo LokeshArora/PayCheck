@@ -3,10 +3,6 @@
  */
 package smartpay.login.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.net.Socket;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +12,7 @@ import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
 import smartpay.login.bean.LoginBean;
-import smartpay.login.dao.LoginDAO;
+import smartpay.login.service.LoginSvc;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -28,7 +24,7 @@ import com.opensymphony.xwork2.ModelDriven;
 public class LoginAction extends ActionSupport implements
 		ModelDriven<LoginBean>, SessionAware {
 
-	private LoginDAO loginDAO;
+	private LoginSvc loginSvc;
 	private LoginBean loginBean;
 	private static final long serialVersionUID = 1L;
 	private SessionMap sessionMap;
@@ -51,7 +47,7 @@ public class LoginAction extends ActionSupport implements
 		}
 
 		// clearErrorsAndMessages();
-		if (getLoginDAO().isUserExists(loginBean.getUserName(),
+		if (getLoginSvc().isUserExists(loginBean.getUserName(),
 				loginBean.getPassword())) {
 			sessionMap.put("userName", loginBean.getUserName());
 			return SUCCESS;
@@ -59,16 +55,17 @@ public class LoginAction extends ActionSupport implements
 		return ERROR;
 	}
 
-	public String logout() {
-//		sessionMap.invalidate();
+	public String logout() throws Exception {
 		HttpSession session = ServletActionContext.getRequest().getSession(
 				false);
-		session.invalidate();
+		if (session != null) {
+			session.invalidate();
+		}
 		return SUCCESS;
 	}
 
 	public String createUser() {
-		getLoginDAO().createUser(loginBean.getUserName(),
+		getLoginSvc().createUser(loginBean.getUserName(),
 				loginBean.getPassword());
 		return SUCCESS;
 	}
@@ -92,21 +89,6 @@ public class LoginAction extends ActionSupport implements
 	}
 
 	/**
-	 * @return the loginDAO
-	 */
-	public LoginDAO getLoginDAO() {
-		return loginDAO;
-	}
-
-	/**
-	 * @param loginDAO
-	 *            the loginDAO to set
-	 */
-	public void setLoginDAO(LoginDAO loginDAO) {
-		this.loginDAO = loginDAO;
-	}
-
-	/**
 	 * @return the loginBean
 	 */
 	public LoginBean getLoginBean() {
@@ -121,10 +103,26 @@ public class LoginAction extends ActionSupport implements
 		this.loginBean = loginBean;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setSession(Map map) {
 		sessionMap = (SessionMap) map;
 
+	}
+
+	/**
+	 * @return the loginSvc
+	 */
+	public LoginSvc getLoginSvc() {
+		return loginSvc;
+	}
+
+	/**
+	 * @param loginSvc
+	 *            the loginSvc to set
+	 */
+	public void setLoginSvc(LoginSvc loginSvc) {
+		this.loginSvc = loginSvc;
 	}
 
 }

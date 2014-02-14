@@ -3,7 +3,7 @@
  */
 package smartpay.Base;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 /**
  * @author lokesh.a.arora
@@ -11,12 +11,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class IdentityDAO {
 
-	private JdbcTemplate jdbcTemplate;
+	private SimpleJdbcTemplate jdbcTemplate;
+	public IdentityDAO(){
+		
+	}
+	
+	public IdentityDAO(SimpleJdbcTemplate jdbcTemplate) {  
+        this.jdbcTemplate = jdbcTemplate;  
+	}  
 
 	/**
 	 * @return the dataSource
 	 */
-	public JdbcTemplate getJdbcTemplate() {
+	public SimpleJdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
 	}
 
@@ -24,7 +31,7 @@ public class IdentityDAO {
 	 * @param jdbcTemplate
 	 *            the jdbcTemplate to set
 	 */
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+	public void setJdbcTemplate(SimpleJdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

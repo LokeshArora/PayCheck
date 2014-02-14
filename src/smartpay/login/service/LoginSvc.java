@@ -1,10 +1,10 @@
-package smartpay.login.dao;
+package smartpay.login.service;
 
 /**
  * @author lokesh.a.arora
- *
+ * 
  */
-public interface LoginDAO {
+public interface LoginSvc {
 
 	/**
 	 * @param userName
@@ -12,11 +12,11 @@ public interface LoginDAO {
 	 * @return
 	 */
 	public boolean isUserExists(String userName, String password);
-	
-	
+
 	/**
 	 * @param userName
 	 * @param password
 	 */
 	public void createUser(String userName, String password);
+
 }
